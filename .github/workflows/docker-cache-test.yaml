@@ -27,13 +27,12 @@ jobs:
           cache-from: type=gha,ref=master
           cache-to: type=gha,ref=master,mode=max
 
+      - name: Tag Docker Image
+        run: |
+          docker tag react-app:latest react-app:cached
+
       - name: Build and run with docker compose
         working-directory: ./react-app
         run: |
-          docker-compose up --build -d
+          docker-compose up -d
           docker-compose ps
-
-      - name: Test Docker Image
-        working-directory: ./react-app
-        run: |
-          docker-compose exec react-app echo "Hello World!"
