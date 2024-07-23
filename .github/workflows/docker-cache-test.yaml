@@ -24,3 +24,6 @@ jobs:
           file: ./react-app/Dockerfile
           cache-from: type=gha,ref=master
           cache-to: type=gha,ref=master,mode=max
+
+      - name: Run Docker Image
+        run: docker run --name react-app react-app
