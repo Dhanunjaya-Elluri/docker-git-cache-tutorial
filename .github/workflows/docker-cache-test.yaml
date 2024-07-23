@@ -27,6 +27,11 @@ jobs:
           cache-from: type=gha,ref=master
           cache-to: type=gha,ref=master,mode=max
 
-      - name: Run Docker Image
+      - name: Build and run with docker compose
         run: |
-          docker run --rm react-app:latest
+          docker-compose up --build -d
+          docker-compose ps
+
+      - name: Test Docker Image
+        run: |
+          docker-compose exec react-app echo "Hello World!"

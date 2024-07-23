@@ -11,4 +11,4 @@ COPY . /app
 EXPOSE 3000
 
 # CMD ["npm", "start"]
-CMD ["echo", "Hello World"]
+CMD ["echo", "Hello World!"]
