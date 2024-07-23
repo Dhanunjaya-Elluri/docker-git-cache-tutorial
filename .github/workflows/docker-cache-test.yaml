@@ -30,6 +30,5 @@ jobs:
       - name: Build and run with docker compose
         working-directory: ./react-app
         run: |
-          docker-compose build --pull never
-          docker-compose up -d
+          docker-compose up -d --pull never
           docker-compose ps
