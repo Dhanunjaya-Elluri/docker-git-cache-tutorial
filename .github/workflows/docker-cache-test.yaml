@@ -28,10 +28,12 @@ jobs:
           cache-to: type=gha,ref=master,mode=max
 
       - name: Build and run with docker compose
+        working-directory: ./react-app
         run: |
           docker-compose up --build -d
           docker-compose ps
 
       - name: Test Docker Image
+        working-directory: ./react-app
         run: |
           docker-compose exec react-app echo "Hello World!"
