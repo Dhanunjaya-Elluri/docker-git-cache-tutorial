@@ -22,8 +22,11 @@ jobs:
         with:
           context: ./react-app
           file: ./react-app/Dockerfile
+          tags: react-app:latest
+          load: true
           cache-from: type=gha,ref=master
           cache-to: type=gha,ref=master,mode=max
 
       - name: Run Docker Image
-        run: docker run --name react-app react-app
+        run: |
+          docker run --rm react-app:latest
