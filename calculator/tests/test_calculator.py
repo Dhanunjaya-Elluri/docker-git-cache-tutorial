@@ -1,5 +1,5 @@
 import pytest
-from app.calculator import add, subtract, multiply, divide
+from app.calculator import add, square, subtract, multiply, divide
 
 def test_add():
     assert add(1, 2) == 3
@@ -22,3 +22,8 @@ def test_divide():
     assert divide(-1, -1) == 1
     with pytest.raises(ValueError):
         divide(1, 0)
+
+def test_square():
+    assert square(2) == 4
+    assert square(3) == 9
+    assert square(4) == 16
