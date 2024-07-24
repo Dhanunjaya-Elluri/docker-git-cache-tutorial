@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  test:
+    image: user/repo:latest
+    container_name: calculator_test
+    command: pytest tests
+    volumes:
+      - .:/usr/src/app
