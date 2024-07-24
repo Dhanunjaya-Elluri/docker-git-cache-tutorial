@@ -39,4 +39,4 @@ jobs:
         cache-to: type=local,dest=/tmp/.buildx-cache
 
     - name: Run tests
-      run: docker-compose -f docker-compose.tests.yml run --rm test
+      run: docker-compose -f docker-compose.tests.yaml run --rm test
