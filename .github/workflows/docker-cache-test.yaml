@@ -34,9 +34,15 @@ jobs:
         context: .
         file: Dockerfile
         push: false
-        tags: local/calculator:latest
+        load: true
+        tags: calculator:latest
         cache-from: type=local,src=/tmp/.buildx-cache
-        cache-to: type=local,dest=/tmp/.buildx-cache
+        cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+    - name: Move cache
+      run: |
+        rm -rf /tmp/.buildx-cache
+        mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
     - name: Run tests
       run: docker-compose -f docker-compose.tests.yaml run --rm test
