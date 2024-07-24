@@ -4,6 +4,6 @@ services:
   test:
     image: calculator:latest
     container_name: calculator_test
-    command: pytest tests
+    command: pytest calculator/tests
     volumes:
       - .:/usr/src/app
