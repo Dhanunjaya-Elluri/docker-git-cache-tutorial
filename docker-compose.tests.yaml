@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   test:
-    image: user/repo:latest
+    image: local/calculator:latest
     container_name: calculator_test
     command: pytest tests
     volumes:
