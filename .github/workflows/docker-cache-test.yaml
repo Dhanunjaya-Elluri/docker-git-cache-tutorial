@@ -24,7 +24,6 @@ jobs:
       with:
         context: .
         file: Dockerfile
-        push: false
         load: true
         tags: calculator:latest
         cache-from: type=gha
