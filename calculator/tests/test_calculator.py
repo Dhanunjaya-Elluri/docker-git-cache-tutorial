@@ -31,4 +31,5 @@ def test_square():
     assert square(5) == 25
 
 def test_env():
-    assert os.getenv('ENV') == 'test'
+    assert os.getenv('ENV1') == 'test1'
+    assert os.getenv('ENV2') == 'test2'

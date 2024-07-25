@@ -30,4 +30,5 @@ jobs:
         cache-to: type=gha,mode=max
 
     - name: Run tests
-      run: docker-compose -f docker-compose.tests.yaml run --rm test
+      run: |
+        docker-compose -f docker-compose.tests.yaml run -e ENV1=test1 --rm test 

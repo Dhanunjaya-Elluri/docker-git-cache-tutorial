@@ -8,4 +8,4 @@ services:
     volumes:
       - .:/usr/src/app
     environment:
-      - ENV=test
+      - ENV2=test2
