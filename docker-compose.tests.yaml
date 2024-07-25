@@ -7,3 +7,5 @@ services:
     command: pytest calculator/tests
     volumes:
       - .:/usr/src/app
+    environment:
+      - ENV=test

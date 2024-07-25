@@ -1,3 +1,4 @@
+import os
 import pytest
 from app.calculator import add, square, subtract, multiply, divide
 
@@ -28,3 +29,6 @@ def test_square():
     assert square(3) == 9
     assert square(4) == 16
     assert square(5) == 25
+
+def test_env():
+    assert os.getenv('ENV') == 'test'
