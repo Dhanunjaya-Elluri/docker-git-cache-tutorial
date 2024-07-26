@@ -2,10 +2,10 @@
     "target": {
       "service-name": {
         "cache-from": [
-          "type=registry,ref=008003088695.dkr.ecr.eu-central-1.amazonaws.com/cache-repository/calculator:cache"
+          "type=registry,ref=008003088695.dkr.ecr.eu-central-1.amazonaws.com/cache-repository:cache"
         ],
         "cache-to": [
-          "type=registry,mode=max,image-manifest=true,oci-mediatypes=true,ref=008003088695.dkr.ecr.eu-central-1.amazonaws.com/cache-repository/calculator:cache"
+          "type=registry,mode=max,image-manifest=true,ref=008003088695.dkr.ecr.eu-central-1.amazonaws.com/cache-repository:cache"
         ],
         "output": [
           "type=docker"
