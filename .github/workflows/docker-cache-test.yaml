@@ -8,6 +8,10 @@ on:
     branches:
       - master
 
+env:
+  AWS_REGION: eu-central-1
+  ECR_REPO_NAME: calculator
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -16,18 +20,35 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Configure AWS Credentials
+      id: configure-aws-credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
+    - name: Create and use new docker builder instance
+      run: docker buildx create --name docker-builder --use
+
     - name: Build and Push Docker image
       uses: docker/build-push-action@v5
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       with:
         context: .
         file: Dockerfile
-        load: true
-        tags: calculator:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        push: true
+        builder: docker-builder
+        cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/$${{ env.ECR_REPO_NAME }}:cache
+        cache-to: type=registry,mode=max,image-manifest=true,oci-mediatypes=true,ref=${{ env.ECR_REGISTRY }}/$${{ env.ECR_REPO_NAME }}:cache
 
     - name: Run tests
       run: |
