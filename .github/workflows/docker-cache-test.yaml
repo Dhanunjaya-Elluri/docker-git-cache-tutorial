@@ -10,8 +10,8 @@ on:
 
 env:
   AWS_REGION: eu-central-1
-  ECR_REPO_NAME: calculator
-
+  ECR_REPO_NAME: cache-repository
+  
 jobs:
   test:
     runs-on: ubuntu-latest
