@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   test:
-    image: ghcr.io/${{ github.repository }}:latest
+    image: ${IMAGE_NAME}
     container_name: calculator_test
     command: pytest calculator/tests
     volumes:

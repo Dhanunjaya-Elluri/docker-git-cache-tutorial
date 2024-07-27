@@ -32,6 +32,13 @@ jobs:
     #   id: login-ecr
     #   uses: aws-actions/amazon-ecr-login@v1
 
+    - name: Docker Meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ghcr.io/${{ github.repository.name }}
+        tags: latest
+
     - name: Login to GitHub Repository
       uses: docker/login-action@v2
       with:
@@ -50,11 +57,11 @@ jobs:
       with:
         context: .
         file: Dockerfile
-        tags: ghcr.io/${{ github.repository }}:latest
+        tags: ${{ steps.meta.outputs.tags }}
         push: true
         builder: docker-builder
-        cache-from: type=gha
-        cache-to: type=gha
+        cache-from: type=registry,ref=${{ steps.meta.outputs.tags }}-cache
+        cache-to: type=registry,ref=${{ steps.meta.outputs.tags }}-cache
         # cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
         # cache-to: type=local,dest=/tmp/.buildx-cache-new 
       #  cache-to: type=registry,mode=max,image-manifest=true,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
@@ -65,4 +72,4 @@ jobs:
 
     - name: Run tests
       run: |
-        docker-compose -f docker-compose.tests.yaml run -e ENV1=test1 --rm test 
+        docker-compose -f docker-compose.tests.yaml run -e ENV1=test1 -e IMAGE_NAME=${{ steps.meta.outputs.tags }} --rm test
