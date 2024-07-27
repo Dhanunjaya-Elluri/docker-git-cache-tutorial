@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   test:
-    image: 008003088695.dkr.ecr.eu-central-1.amazonaws.com/cache-repository:cache
+    image: calculator:latest
     container_name: calculator_test
     command: pytest calculator/tests
     volumes:

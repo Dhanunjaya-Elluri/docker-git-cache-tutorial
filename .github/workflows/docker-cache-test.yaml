@@ -20,41 +20,40 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Configure AWS Credentials
-      id: configure-aws-credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+    # - name: Configure AWS Credentials
+    #   id: configure-aws-credentials
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: ${{ env.AWS_REGION }}
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+    # - name: Login to Amazon ECR
+    #   id: login-ecr
+    #   uses: aws-actions/amazon-ecr-login@v1
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    # - name: Create and use new docker builder instance
-    #   run: docker buildx create --name docker-builder --use
+    - name: Create and use new docker builder instance
+      run: docker buildx create --name docker-builder --use
 
-    # - name: Build and Push Docker image
-    #   uses: docker/build-push-action@v5
-    #   env:
-    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-    #   with:
-    #     context: .
-    #     file: Dockerfile
-    #     push: true
-    #     tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:latest
-    #     builder: docker-builder
-    #     cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
-    #     cache-to: type=local,dest=/tmp/.buildx-cache-new 
-    #   #  cache-to: type=registry,mode=max,image-manifest=true,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
+    - name: Build and Push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: Dockerfile
+        tags: calculator:latest
+        builder: docker-builder
+        cache-from: type=gha
+        cache-to: type=gha
+        # cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
+        # cache-to: type=local,dest=/tmp/.buildx-cache-new 
+      #  cache-to: type=registry,mode=max,image-manifest=true,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
 
-    - name: Build docker-compose
-      run: |
-        docker buildx bake --file docker-compose.yaml --file docker-compose-cache.json
+    # - name: Build docker-compose
+    #   run: |
+    #     docker buildx bake --file docker-compose.yaml --file docker-compose-cache.json
 
     - name: Run tests
       run: |
