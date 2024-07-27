@@ -44,6 +44,7 @@ jobs:
         context: .
         file: Dockerfile
         tags: calculator:latest
+        load: true
         builder: docker-builder
         cache-from: type=gha
         cache-to: type=gha
