@@ -74,5 +74,7 @@ jobs:
     #     docker buildx bake --file docker-compose.yaml --file docker-compose-cache.json 
 
     - name: Run tests
+      env:
+        IMAGE_NAME: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
       run: |
-        docker-compose -f docker-compose.tests.yaml run -e ENV1=test1 -e IMAGE_NAME=${ECR_REGISTRY}/${ECR_REPO_NAME}:latest --rm test
+        docker-compose -f docker-compose.tests.yaml run -e ENV1=test1 --rm test
