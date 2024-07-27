@@ -20,17 +20,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Configure AWS Credentials
-      id: configure-aws-credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+    # - name: Configure AWS Credentials
+    #   id: configure-aws-credentials
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: ${{ env.AWS_REGION }}
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+    # - name: Login to Amazon ECR
+    #   id: login-ecr
+    #   uses: aws-actions/amazon-ecr-login@v1
 
     # - name: Docker Meta
     #   id: meta
@@ -39,33 +39,33 @@ jobs:
     #     images: ghcr.io/${{ github.repository }}
     #     tags: latest
 
-    - name: Login to GitHub Repository
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GIT_TOKEN }}
+    # - name: Login to GitHub Repository
+    #   uses: docker/login-action@v2
+    #   with:
+    #     registry: ghcr.io
+    #     username: ${{ github.actor }}
+    #     password: ${{ secrets.GIT_TOKEN }}
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+    # - name: Set up Docker Buildx
+    #   uses: docker/setup-buildx-action@v3
 
-    - name: Create and use new docker builder instance
-      run: docker buildx create --name docker-builder --use
+    # - name: Create and use new docker builder instance
+    #   run: docker buildx create --name docker-builder --use
 
-    - name: Build and Push Docker image
-      uses: docker/build-push-action@v5
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPO_NAME: ${{ env.ECR_REPO_NAME }}
-      with:
-        context: .
-        file: Dockerfile
-        tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
-        push: true
-        load: true
-        builder: docker-builder
-        cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
-        cache-to: type=registry,mode=max,image-manifest=true,oci-mediatypes=true,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
+    # - name: Build and Push Docker image
+    #   uses: docker/build-push-action@v5
+    #   env:
+    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #     ECR_REPO_NAME: ${{ env.ECR_REPO_NAME }}
+    #   with:
+    #     context: .
+    #     file: Dockerfile
+    #     tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
+    #     push: true
+    #     load: true
+    #     builder: docker-builder
+    #     cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
+    #     cache-to: type=registry,mode=max,image-manifest=true,oci-mediatypes=true,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
         # cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
         # cache-to: type=local,dest=/tmp/.buildx-cache-new 
       #  cache-to: type=registry,mode=max,image-manifest=true,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
@@ -74,8 +74,16 @@ jobs:
     #   run: |
     #     docker buildx bake --file docker-compose.yaml --file docker-compose-cache.json 
 
+    - uses: satackey/action-docker-layer-caching@v0.0.11
+      # Ignore the failure of a step and avoid terminating the job.
+      continue-on-error: true
+    
+    - name: Build docker-compose
+      run: |
+        docker-compose -f docker-compose.tests.yaml build
+
     - name: Run tests
-      env:
-        IMAGE_NAME: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
+      # env:
+      #   IMAGE_NAME: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
       run: |
         docker-compose -f docker-compose.tests.yaml run -e ENV1=test1 --rm test
