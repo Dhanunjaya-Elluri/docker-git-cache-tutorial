@@ -54,7 +54,7 @@ jobs:
 
     # - name: Build docker-compose
     #   run: |
-    #     docker buildx bake --file docker-compose.yaml --file docker-compose-cache.json
+    #     docker buildx bake --file docker-compose.yaml --file docker-compose-cache.json 
 
     - name: Run tests
       run: |
