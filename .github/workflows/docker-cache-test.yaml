@@ -47,6 +47,8 @@ jobs:
 
     - name: Build and Push Docker image if requirements.txt changed
       uses: docker/build-push-action@v5
+      env:
+        DOCKER_BUILDKIT: 1
       # if: ${{ steps.check_requirements.outputs.requirements_changed == 'true' }}
       # env:
       #   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
