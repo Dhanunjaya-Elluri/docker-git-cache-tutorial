@@ -57,7 +57,6 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPO_NAME: ${{ env.ECR_REPO_NAME }}
-        DOCKER_BUILDKIT: 1
       with:
         context: .
         file: Dockerfile
@@ -67,6 +66,8 @@ jobs:
         builder: docker-builder
         cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
         cache-to: 'type=registry,mode=max,image-manifest=true,oci-mediatypes=true,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache'
+        build-args: |
+          BUILDKIT_INLINE_CACHE=1
 
     - name: Build and cache docker image if requirements.txt is not changed
       uses: docker/build-push-action@v5
@@ -74,7 +75,6 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPO_NAME: ${{ env.ECR_REPO_NAME }}
-        DOCKER_BUILDKIT: 1
       with:
         context: .
         file: Dockerfile
@@ -83,6 +83,8 @@ jobs:
         load: true
         builder: docker-builder
         cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
+        build-args: |
+          BUILDKIT_INLINE_CACHE=1
         
 
     # - name: Build docker-compose
