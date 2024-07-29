@@ -72,13 +72,13 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPO_NAME: ${{ env.ECR_REPO_NAME }}
+        DOCKER_BUILDKIT: 1
       with:
         context: .
         file: Dockerfile
         tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
         push: false
         load: true
-        builder: docker-builder
         cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
         build-args: |
           BUILDKIT_INLINE_CACHE=1
