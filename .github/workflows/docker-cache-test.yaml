@@ -54,7 +54,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPO_NAME: ${{ env.ECR_REPO_NAME }}
-        DOCKER_BUILDKIT: 1
+        # DOCKER_BUILDKIT: 1
       with:
         context: .
         file: Dockerfile
@@ -72,7 +72,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPO_NAME: ${{ env.ECR_REPO_NAME }}
-        DOCKER_BUILDKIT: 1
+        # DOCKER_BUILDKIT: 1
       with:
         context: .
         file: Dockerfile
