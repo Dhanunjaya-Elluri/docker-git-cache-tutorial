@@ -47,8 +47,6 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
-      with:
-        driver: remote
 
     - name: Build and Push Docker image if requirements.txt changed
       uses: docker/build-push-action@v5
