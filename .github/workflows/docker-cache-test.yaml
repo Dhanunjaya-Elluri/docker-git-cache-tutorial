@@ -55,9 +55,8 @@ jobs:
         context: .
         file: Dockerfile
         tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
-        # push: true
+        push: true
         load: true
-        pull: true
         # cache-to: type=gha,mode=max
         # cache-from: type=gha
         cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
@@ -75,6 +74,7 @@ jobs:
         file: Dockerfile
         tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
         push: false
+        pull: true
         load: true
         cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_NAME }}:cache
         
